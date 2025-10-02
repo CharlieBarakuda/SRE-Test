@@ -1,5 +1,5 @@
 # webapp-k8s
-Kubernetes manifests for a highly-available web app (nginx demo): Namespace, Service, Ingress, PDB, Deployment, HPA.
+Kubernetes manifests for a web app (nginx demo): Namespace, Service, Ingress, Deployment.
 
 ## Apply order
 ```bash
