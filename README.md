@@ -12,6 +12,7 @@ kubectl apply -f deployment.yaml
 ## Access locally (port-forward) 
 ```bash
 kubectl -n webapp-prod port-forward deploy/app 8080:80
+# if 8080 is busy, use 8081
 ```
 ## Open using: 
 ```bash
