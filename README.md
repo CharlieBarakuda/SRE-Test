@@ -6,6 +6,4 @@ Kubernetes manifests for a highly-available web app (nginx demo): Namespace, Ser
 kubectl apply -f k8s/namespace.yaml
 kubectl apply -f k8s/service.yaml
 kubectl apply -f k8s/ingress.yaml
-kubectl apply -f k8s/pdb.yaml
 kubectl apply -f k8s/deployment.yaml
-kubectl apply -f k8s/hpa.yaml
