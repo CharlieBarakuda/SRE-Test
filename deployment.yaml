@@ -1,13 +1,5 @@
-# Deployment управляет репликами подов и их поэтапным обновлением (rolling update).
-# Минимум 2 реплики для доступности.
-# strategy: RollingUpdate обеспечивает обновления без простоя.
-# topologySpreadConstraints + podAntiAffinity распределяют поды по нодам/зонам.
-# Ресурсы:
-#   - requests: 100m CPU, 128Mi памяти (базовое потребление после запуска)
-#   - limits: 2 CPU, 256Mi памяти (запас для пиков нагрузки при инициализации)
-# Пробы:
-#   - readinessProbe: трафик идёт только на готовый под
-#   - livenessProbe: перезапускает под если он завис
+# Deployment управляет репликами подов и выполняет rolling-update.
+# Здесь 2 реплики для базовой отказоустойчивости.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,47 +7,17 @@ metadata:
   namespace: webapp-prod
 spec:
   replicas: 2
-  revisionHistoryLimit: 3
-  strategy:
-    type: RollingUpdate
-    rollingUpdate: { maxSurge: 1, maxUnavailable: 0 }
   selector:
-    matchLabels: { app: app }
+    matchLabels:
+      app: app
   template:
     metadata:
-      labels: { app: app }
+      labels:
+        app: app
     spec:
-      topologySpreadConstraints:
-        - maxSkew: 1
-          topologyKey: topology.kubernetes.io/zone
-          whenUnsatisfiable: ScheduleAnyway
-          labelSelector: { matchLabels: { app: app } }
-        - maxSkew: 1
-          topologyKey: kubernetes.io/hostname
-          whenUnsatisfiable: ScheduleAnyway
-          labelSelector: { matchLabels: { app: app } }
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 100
-              podAffinityTerm:
-                topologyKey: kubernetes.io/hostname
-                labelSelector: { matchLabels: { app: app } }
       containers:
         - name: app
+          # Лёгкий образ nginx
           image: nginx:1.27-alpine
-          ports: [ { containerPort: 80 } ]
-          resources:
-            requests: { cpu: "100m", memory: "128Mi" }
-            limits:   { cpu: "2",    memory: "256Mi" }
-          readinessProbe:
-            httpGet: { path: /, port: 80 }
-            periodSeconds: 5
-            timeoutSeconds: 2
-            failureThreshold: 3
-          livenessProbe:
-            httpGet: { path: /, port: 80 }
-            initialDelaySeconds: 10
-            periodSeconds: 10
-            timeoutSeconds: 2
-            failureThreshold: 3
+          ports:
+            - containerPort: 80
