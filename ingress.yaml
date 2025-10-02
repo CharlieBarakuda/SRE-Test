@@ -1,3 +1,4 @@
+# Ingress маршрутизирует HTTP-трафик из вне кластера к сервису.
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
