@@ -1,12 +1,9 @@
-# Ingress маршрутизирует HTTP-трафик из вне кластера к сервису.
+# Ingress публикует HTTP-доступ извне кластера на Service.
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: app-ingress
   namespace: webapp-prod
-  annotations:
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
 spec:
   ingressClassName: nginx
   rules:
@@ -17,4 +14,6 @@ spec:
             backend:
               service:
                 name: app-svc
-                port: { number: 80 }
+                port:
+                  number: 80
+
