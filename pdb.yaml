@@ -1,3 +1,5 @@
+# PodDisruptionBudget гарантирует высокую доступность при добровольных сбоях (например, drain ноды или обновления кластера).
+# minAvailable: 2 гарантирует, что как минимум 2 пода будут работать.
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
